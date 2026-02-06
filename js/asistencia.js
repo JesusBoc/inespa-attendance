@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', init)
 async function init() {
   if (!dmg_id) {
     alert('Falta el ID de asignación docente ')
+    window.location.href = 'clases.html'
     return
   }
 
@@ -101,6 +102,7 @@ function render() {
     fila.appendChild(estado)
     cont.appendChild(fila)
   })
+  document.body.style.opacity = 1
 }
 
 document.addEventListener('click', e => {
@@ -144,5 +146,8 @@ window.guardar = async function () {
   if(!error){
     alert("Asistencia guardada correctamente")
     window.location.href = "clases.html"
+  }
+  else{
+    alert(error.message)
   }
 }

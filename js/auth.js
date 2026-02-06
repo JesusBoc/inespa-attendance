@@ -1,7 +1,13 @@
 import { supabase } from './supabase.js'
 
 const btn = document.getElementById('loginBtn')
-const output = document.getElementById('output')
+
+const { data: { user } } = await supabase.auth.getUser()
+if (user) {
+  window.location.href = 'clases.html'
+} else {
+  document.body.style.opacity = '1'
+}
 
 btn.addEventListener('click', async () => {
   const email = document.getElementById('email').value
@@ -13,10 +19,9 @@ btn.addEventListener('click', async () => {
   })
 
   if (error) {
-    output.textContent = error.message
+    alert(error.message)
   } else {
-    output.textContent = 'Login correcto'
-    console.log(data.user)
+    alert("Bienvenido")
     window.location.href = 'clases.html'
   }
 })

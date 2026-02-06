@@ -5,6 +5,9 @@ if (!user) {
     window.location.href = 'index.html'
 }
 
+console.log(user);
+
+
 const { data: perfil } = await supabase
     .from('perfiles_usuarios')
     .select('*')
@@ -16,6 +19,7 @@ document.getElementById('saludo').textContent =
 const { data: clases } = await supabase
     .from('vista_clases_docente')
     .select('*')
+    .eq('docente_id', user.id)
 
 const contClases = document.getElementById('clases')
 
@@ -25,12 +29,22 @@ if (clases.length === 0) {
     clases.forEach(c => {
         const div = document.createElement('div')
         div.className = 'card'
-        div.innerHTML = `
-                  <strong>${c.grupo} - ${c.materia}</strong><br>
-                  <button onclick="irAsistencia('${c.dmg_id}')">
-                    Tomar asistencia
-                  </button>
-                `
+
+        const titulo = document.createElement('strong')
+        titulo.innerText = `${c.grupo} - ${c.materia}`
+        titulo.className = 'classInfo'
+
+        const lineBreak = document.createElement('br')
+
+        const btn = document.createElement('button')
+        btn.innerText = 'Tomar asistencia'
+        btn.onclick = () => irAsistencia(c.dmg_id)
+        btn.className = "goAttendance"
+        
+        div.appendChild(titulo)
+        div.appendChild(lineBreak)
+        div.appendChild(btn)
+
         contClases.appendChild(div)
     })
 }
@@ -48,20 +62,30 @@ if (gruposDir.length === 0) {
     gruposDir.forEach(g => {
         const div = document.createElement('div')
         div.className = 'card'
-        div.innerHTML = `
-                  <strong>${g.nombre}</strong><br>
-                  <button onclick="irReporte('${g.id}')">
-                    Ver reporte general
-                  </button>
-                `
+
+        const titulo = document.createElement('strong')
+        titulo.innerText = `${g.nombre}`
+        titulo.className = 'classInfo'
+
+        const lineBreak = document.createElement('br')
+
+        const btn = document.createElement('button')
+        btn.innerText = 'Ver reporte general'
+        btn.onclick = () => irReporte(g.id)
+        btn.className = "goAttendance"
+        
+        div.appendChild(titulo)
+        div.appendChild(lineBreak)
+        div.appendChild(btn)
         contDir.appendChild(div)
     })
+    document.body.style.opacity = '1'
 }
 
-window.irAsistencia = (dmg_id) => {
+function irAsistencia(dmg_id){
     window.location.href = `asistencia.html?dmg_id=${dmg_id}`
 }
 
-window.irReporte = (dmg_id) => {
+function irReporte(dmg_id) {
     alert('Reporte aun no implementado')
 }

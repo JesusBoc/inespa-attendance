@@ -3,16 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asistencia | Clase</title>
+    <title>Asistencia | Selección de clase</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="shortcut icon" href="./assets/escudo.ico" type="image/x-icon">
 </head>
 <body>
-    <h1>Clases disponibles</h1>
-    <h2 id="saludo"></h2>
-
-    <h3>Mis Clases</h3>
-    <div id="clases"></div>
-    <h3>Dirección de grupo</h3>
-    <div id="direccion"></div>
+    <header>
+        <h1>Clases disponibles</h1>
+        <h2 id="saludo"></h2>
+    </header>
+    <main>
+        <section>
+            <h3 class="sectionTitle">Mis Clases</h3>
+            <div id="clases" class="cardContainer"></div>
+        </section>
+        <section>
+            <h3 class="sectionTitle">Dirección de grupo</h3>
+            <div id="direccion" class="cardContainer"></div>
+        </section>
+    </main>
 
     <script type="module" src="./js/clases.js"></script>
 </body>

@@ -3,19 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Toma de asistencia</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="shortcut icon" href="./assets/escudo.ico" type="image/x-icon">
 </head>
 <body>
-    <h2 id="titulo"></h2>
+    <div class="app">
+        <header>
+            <h1 id="titulo"></h1>
+            <h2 id="subtitulo"></h2>
+        </header>
+        <div id="acciones">
+            <button id="allPresent" class="attendanceButton" onclick="todosPresentes()">Todos presentes</button>
+            <button id="allAbsent" class="attendanceButton" onclick="todosAusentes()">Todos ausentes</button>
+        </div>
+        <main>
+            <div id="lista"></div>
+        </main>
 
-    <div id="acciones">
-        <button onclick="todosPresentes()">Todos presentes</button>
-        <button onclick="todosAusentes()">Todos ausentes</button>
+        <footer>
+            <button class="guardar attendanceButton" onclick="guardar()">Guardar asistencia</button>
+        </footer>
     </div>
-
-    <div id="lista"></div>
-
-    <button onclick="guardar()">Guardar asistencia</button>
     <script type="module" src="./js/asistencia.js"></script>
 </body>
 </html>

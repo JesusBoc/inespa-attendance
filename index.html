@@ -5,15 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
     <title>Asistencia | Login</title>
+    <link rel="shortcut icon" href="./assets/escudo.ico" type="image/x-icon">
 </head>
-<body>
-    <h1>Login docente</h1>
+<body id="loginBody">
+    <header id="loginHeader">
+        <h1 class="titulo">
+            Sistema de asistencia, I.E.D. San Pablo
+        </h1>
+    </header>
+    <main class="indexMain">
+        <div class="card" id="login">
+            <h1>Login docente</h1>
 
-    <input type="email" name="email" id="email" placeholder="Correo">
-    <input type="password" name="password" id="password" placeholder="Contraseña">
-    <input type="button" value="Ingresar" id="loginBtn">
-
-    <pre id="output"></pre>
+            <input type="email" name="email" id="email" placeholder="Correo">
+            <input type="password" name="password" id="password" placeholder="Contraseña">
+            <input type="button" value="Ingresar" id="loginBtn">
+        </div>
+    </main>
 
     <script type="module" src="./js/auth.js"></script>
 </body>
