@@ -13,21 +13,18 @@ async function main() {
 }
 
 async function login() {
-  async () => {
-    const emailField = document.querySelector<HTMLInputElement>('#email')!
-    const passwordField = document.querySelector<HTMLInputElement>('#password')!
+  const emailField = document.querySelector<HTMLInputElement>('#email')!
+  const passwordField = document.querySelector<HTMLInputElement>('#password')!
+  const { error } = await supabase.auth.signInWithPassword({
+    email: emailField.value,
+    password: passwordField.value
+  })
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email: emailField.value,
-      password: passwordField.value
-    })
-
-    if (error) {
-      alert(error.message)
-    } else {
-      alert("Bienvenido")
-      location.replace('clases.html')
-    }
+  if (error) {
+    alert(error.message)
+  } else {
+    alert("Bienvenido")
+    location.replace('clases.html')
   }
 }
 

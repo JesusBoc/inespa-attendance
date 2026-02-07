@@ -6,10 +6,6 @@ async function main() {
         location.replace('index.html')
         return
     }
-
-    console.log(user);
-
-
     const { data: perfil } = await supabase
         .from('perfiles_usuarios')
         .select('*')
