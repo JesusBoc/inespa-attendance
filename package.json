@@ -1,0 +1,28 @@
+{
+  "name": "attendance",
+  "version": "1.0.0",
+  "description": "Sistema web para la toma de asistencia docente, desarrollado con:\r - Frontend: HTML, CSS, JavaScript\r - Backend: Supabase (Auth + Postgres + RLS)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JesusBoc/inespa-attendance.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/JesusBoc/inespa-attendance/issues"
+  },
+  "homepage": "https://github.com/JesusBoc/inespa-attendance#readme",
+  "devDependencies": {
+    "supabase": "^2.76.3",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.95.3"
+  }
+}
