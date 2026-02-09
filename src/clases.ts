@@ -79,11 +79,11 @@ async function main() {
             div.appendChild(btn)
             contDir.appendChild(div)
         })
-        document.body.style.opacity = '1'
     }
+    document.body.style.opacity = '1'
 
     function irAsistencia(dmg_id: string | null) {
-        window.location.href = `asistencia.html?dmg_id=${dmg_id}`
+        location.replace(`asistencia.html?dmg_id=${dmg_id}`)
     }
 
     function irReporte(dmg_id: string) {
