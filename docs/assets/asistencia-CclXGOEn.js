@@ -1,0 +1,1 @@
+var t=(e=>(e.Presente="presente",e.Ausente="ausente",e.Tarde="tarde",e.Excusa="excusa",e))(t||{});class a{static next(r){switch(r){case"presente":return"ausente";case"ausente":return"tarde";case"tarde":return"excusa";case"excusa":return"presente"}}}export{a as A,t as E};
