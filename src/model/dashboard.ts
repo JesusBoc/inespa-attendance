@@ -67,9 +67,6 @@ export class Reporte extends tableableData<string, EstadoAsistencia, number>
         })
         return map
     }
-    public getNumber(estado: EstadoAsistencia): number {
-        return this.records[estado] ?? 0
-    }
 }
 
 export type ReporteDTO = {

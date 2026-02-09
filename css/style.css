@@ -262,3 +262,28 @@ footer {
     transform: translateY(-1px);
     box-shadow: 0 6px 15px rgba(0,0,0,0.2);
 }
+
+.tabPanel {
+    overflow:scroll;
+}
+
+.reportTable {
+    margin: auto;
+    border-collapse: collapse;
+}
+
+.reportTable thead{
+    background: linear-gradient(135deg,rgba(46, 125, 50, 1) 0%, rgba(0, 255, 0, 1) 100%);
+    color: white;
+}
+
+.reportTable td, .reportTable th {
+    font-size: 1.6rem;
+    padding: 3px;
+    text-align: center;
+    border-bottom: 1px solid rgb(0, 0, 0);
+}
+
+.active {
+    display: inline;
+}
