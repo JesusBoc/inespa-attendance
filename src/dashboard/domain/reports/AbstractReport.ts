@@ -27,5 +27,5 @@ export abstract class AbstractReport<RowKey extends string | number, MetricKey e
     }
 
     public abstract toRow(): string[]
-    public abstract getHeaders(): string[] 
+    abstract getHeaders(): string[] 
 }

@@ -72,6 +72,13 @@ export type Database = {
             foreignKeyName: "alertas_estudiante_id_fkey"
             columns: ["estudiante_id"]
             isOneToOne: false
+            referencedRelation: "asistencias_por_dia"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alertas_estudiante_id_fkey"
+            columns: ["estudiante_id"]
+            isOneToOne: false
             referencedRelation: "estudiantes"
             referencedColumns: ["id"]
           },
@@ -105,6 +112,13 @@ export type Database = {
             columns: ["clase_id"]
             isOneToOne: false
             referencedRelation: "clases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "asistencias_estudiante_id_fkey"
+            columns: ["estudiante_id"]
+            isOneToOne: false
+            referencedRelation: "asistencias_por_dia"
             referencedColumns: ["id"]
           },
           {
@@ -380,6 +394,33 @@ export type Database = {
       }
     }
     Views: {
+      asistencias_por_dia: {
+        Row: {
+          apellido: string | null
+          estado: string | null
+          fecha: string | null
+          grupo_id: string | null
+          id: string | null
+          materia: string | null
+          nombre: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clases_grupo_id_fkey"
+            columns: ["grupo_id"]
+            isOneToOne: false
+            referencedRelation: "grupos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clases_grupo_id_fkey"
+            columns: ["grupo_id"]
+            isOneToOne: false
+            referencedRelation: "vista_clases_docente"
+            referencedColumns: ["grupo_id"]
+          },
+        ]
+      }
       vista_clases_docente: {
         Row: {
           dmg_id: string | null

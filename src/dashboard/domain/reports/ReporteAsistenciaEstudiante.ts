@@ -2,8 +2,7 @@ import { AbstractReport } from "./AbstractReport"
 import { EstadoAsistencia } from "../value-objects/EstadoAsistencia"
 
 export class ReporteAsistenciaEstudiante
-  extends AbstractReport<string, EstadoAsistencia, number>
-{
+  extends AbstractReport<string, EstadoAsistencia, number> {
   static readonly baseHeaders = ["Nombre", "Apellido"]
 
   constructor(

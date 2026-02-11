@@ -1,11 +1,16 @@
-import { DashboardState } from "../state/DashboardState";
+import { DashboardState, type DashboardTab } from "../state/DashboardState";
 import { DashboardViewModel } from "../viewmodels/DashboardViewModel";
 import { MateriaTabView } from "../views/MateriasTabView";
 import { isDashboardTab } from "../state/DashboardState";
+import { PorFechaTabView } from "../views/PorFechaTabView";
+import type { View } from "../views/View";
 
 export class DashboardController {
     private state = new DashboardState()
-    private materiasView = new MateriaTabView("tab-materias")
+    private readonly tabViews: View<any>[] = [
+        new MateriaTabView("tab-resumen"),
+        new PorFechaTabView("tab-materias")
+    ]
 
     constructor(
         private vm: DashboardViewModel
@@ -30,12 +35,20 @@ export class DashboardController {
     }
     private renderActiveTab() {
         const active = this.state.getActiveTab()
-
+        this.clearAll()
         switch(active){
-            case "materias": this.materiasView.render(this.vm)
+            case "resumen": 
+                this.tabViews[0]!.render(this.vm)
             break;
-            default: this.materiasView.clear()
+            case "materias": this.tabViews[1]!.render(this.vm)
+            break;
+            default: 
         }
+    }
+    private clearAll() {
+        this.tabViews.forEach(
+            v => v.clear()
+        )
     }
 }
 

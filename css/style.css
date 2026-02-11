@@ -113,6 +113,17 @@ header {
   justify-content: center;
 }
 
+footer {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+footer button {
+    flex: 1;
+    border: None;
+}
+
 #allPresent {
     background-color: var(--ok-green);
 }

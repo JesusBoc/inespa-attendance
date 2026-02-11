@@ -1,5 +1,5 @@
 import { EstadoAsistencia } from "./model/asistencia"
-import type { ReporteDTO } from "./model/dashboard"
+import type { ReporteDTO } from "./dashboard/infrastructure/dto/ReporteDTO"
 
 export const dummyData: ReporteDTO[] = [
   {

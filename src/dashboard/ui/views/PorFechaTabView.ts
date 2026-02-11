@@ -1,10 +1,10 @@
 import { View } from "./View";
 import { DashboardViewModel } from "../viewmodels/DashboardViewModel";
 import { TableView } from "./TableView";
-import { ReporteAsistenciaEstudiante } from "../../domain/reports/ReporteAsistenciaEstudiante";
+import type { ReportePorFecha } from "../../domain/reports/ReportePorFecha";
 
-export class MateriaTabView extends View<DashboardViewModel> {
-    private tableView = new TableView<ReporteAsistenciaEstudiante>()
+export class PorFechaTabView extends View<DashboardViewModel> {
+    private tableView = new TableView<ReportePorFecha>()
     constructor(
         rootId: string,
     ) {
@@ -17,7 +17,7 @@ export class MateriaTabView extends View<DashboardViewModel> {
         materias.forEach(
             m => {
                 const section = this.createSection(m)
-                const reporte = model.getReportesDeMateria(m)
+                const reporte = model.getReportesPorFecha(m)
 
                 if (reporte) {
                     const table = this.tableView.render(reporte)

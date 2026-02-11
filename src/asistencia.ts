@@ -34,6 +34,13 @@ document.getElementById('allAbsent')!
 document.getElementById('saveButton')!
   .addEventListener('click', guardar)
 
+document.getElementById('cancelButton')!
+  .addEventListener('click',
+    () => {
+      location.replace('clases.html')
+    }
+  )
+
 async function init() {
   if (!dmg_id) {
     alert('Falta el ID de asignación docente ')
@@ -71,6 +78,7 @@ async function fetchStudents(grupo_id: string) {
     .from('estudiantes')
     .select('id, nombre, apellido')
     .eq('grupo_id', grupo_id)
+    .eq('activo', true)
     .order('apellido', { ascending: true })
     .order('nombre', { ascending: true })
 

@@ -87,7 +87,7 @@ async function main() {
     }
 
     function irReporte(dmg_id: string) {
-        alert('Reporte aun no implementado')
+        location.replace(`dashboard.html?dmg_id=${dmg_id}`)
     }
 }
 
