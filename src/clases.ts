@@ -20,6 +20,14 @@ async function main() {
         .from('vista_clases_docente')
         .select('*')
         .eq('docente_id', user.id)
+
+    const { data: grupos, error } = await supabase
+        .from('grupos')
+        .select('*')
+        .order('nivel')
+        .order('nombre')
+
+    if(error) alert(error.message)
     
 
     const contClases = document.getElementById('clases')!
@@ -49,17 +57,12 @@ async function main() {
         })
     }
 
-    const { data: gruposDir } = await supabase
-        .from('grupos')
-        .select('id, nombre')
-        .eq('director_id', user.id)
-
     const contDir = document.getElementById('direccion')!
 
-    if (!gruposDir || gruposDir.length === 0) {
+    if (!grupos || grupos.length === 0) {
         contDir.textContent = 'No eres director de grupo'
     } else {
-        gruposDir.forEach(g => {
+        grupos.forEach(g => {
             const div = document.createElement('div')
             div.className = 'card'
 
@@ -87,7 +90,7 @@ async function main() {
     }
 
     function irReporte(dmg_id: string) {
-        location.replace(`dashboard.html?dmg_id=${dmg_id}`)
+        window.location.href = (`dashboard.html?grupo_id=${dmg_id}`)
     }
 }
 

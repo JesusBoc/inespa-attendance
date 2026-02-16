@@ -1,33 +1,34 @@
 import { ReporteAsistenciaEstudiante } from "../../domain/reports/ReporteAsistenciaEstudiante"
+import type { ReporteAsistenciaPorcentaje } from "../../domain/reports/ReporteAsistenciaPorcentaje"
 import type { ReportePorFecha } from "../../domain/reports/ReportePorFecha"
 
 export class DashboardViewModel {
+  private reportMode: 'total' | 'porcentajes' = 'total'
+
   constructor(
-    private reportesPorMateria: Map<
-      string,
-      Map<string, ReporteAsistenciaEstudiante>
-      >,
+    private reportesPorMateria: {
+        total: Map<string, Map<string, ReporteAsistenciaEstudiante>>
+        porcentajes: Map<string, Map<string, ReporteAsistenciaPorcentaje>>
+      },
       private reportesPorFecha: Map<
       string,
       Map<string, ReportePorFecha>
       >
   ) {}
 
-  getMaterias(): string[] {
-    return Array.from(this.reportesPorMateria.keys())
+  toggleMode() {
+    
+    this.reportMode = this.reportMode === 'total'
+      ? 'porcentajes'
+      : 'total'
   }
 
-  setReportesPorMateria(
-    data:Map<
-      string,
-      Map<string, ReporteAsistenciaEstudiante>
-      >
-  ){
-    this.reportesPorMateria = data
+  getMaterias(): string[] {
+    return Array.from(this.reportesPorMateria[this.reportMode].keys())
   }
 
   getReportesDeMateria(materia: string) {
-    return this.reportesPorMateria.get(materia)
+    return this.reportesPorMateria[this.reportMode].get(materia)
   }
 
   getReportesPorFecha(materia: string) {

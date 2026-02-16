@@ -25,7 +25,7 @@ export class ReportePorFecha
 
     public toRow(): string[] {
         const values = this.fechas.map(
-            f => this.get(f) ?? EstadoAsistencia.Ausente
+            f => (this.get(f) ?? EstadoAsistencia.Ausente).toUpperCase()
         )
         return [...this.labels, ...values]
     }

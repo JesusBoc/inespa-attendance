@@ -3,6 +3,7 @@ import { EstadoAsistencia } from "../model/asistencia"
 import { supabase } from "../supabase"
 import { ReporteAsistenciaEstudiante } from "./domain/reports/ReporteAsistenciaEstudiante"
 import type { AsistenciaDTO } from "./infrastructure/dto/AsistenciaDTO"
+import type { ReporteDTO } from "./infrastructure/dto/ReporteDTO"
 import { ReporteAsistenciaFactory } from "./infrastructure/ReporteAsistenciaFactory"
 import { ReportePorFechaMapper } from "./infrastructure/ReportePorFechaFactory"
 import { dummyPorFechas } from "./testData/DummyPorFecha"
@@ -15,16 +16,22 @@ const grupo_id = params.get('grupo_id')
 
 async function main() {
     let reportes: AsistenciaDTO[]
+    let resumen: ReporteDTO[]
     if (!grupo_id) {
         alert("Debe especificar una id de grupo")
         reportes = dummyPorFechas
+        resumen = dummyData
         //return
     }
     else {
-        const { data: asistencias, error } = await supabase
+        const { data: asistencias, error: errorAsistencias } = await supabase
             .from('asistencias_por_dia')
             .select('*')
             .eq('grupo_id', grupo_id)
+
+        if(errorAsistencias){
+            alert(errorAsistencias.message)
+        }
 
         if (!asistencias) {
             reportes = dummyPorFechas
@@ -43,11 +50,35 @@ async function main() {
                 }
             )
         }
+        const { data: reportesResumidos, error: errorReportes } = await supabase
+            .from('asistencias_resumen')
+            .select('*')
+            .eq('grupo_id', grupo_id)
+        
+        if(errorReportes){
+            alert(errorReportes.message)
+        }
+        if (!reportesResumidos) {
+            resumen = dummyData
+        }
+        else {
+            resumen = reportesResumidos?.map(
+                a => {
+                    return {
+                        id: a.estudiante_id,
+                        nombre: a.nombre,
+                        apellido: a.apellido,
+                        estado: a.estado,
+                        materia: a.materia,
+                        count: a.total
+                    } as ReporteDTO
+                }
+            )
+        }
     }
 
-    const reporteResumen = ReporteAsistenciaFactory.build(
-        dummyData,
-        (id, n, a) => new ReporteAsistenciaEstudiante(id, n, a)
+    const reporteResumen = ReporteAsistenciaFactory.buildAll(
+        resumen
     )
     const reportePorFecha = ReportePorFechaMapper.build(
         reportes

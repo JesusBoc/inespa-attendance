@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Asistencias</title>
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="shortcut icon" href="assets/escudo.ico" type="image/x-icon">
 </head>
 <body>
     <div id="dashboard">
@@ -15,15 +16,22 @@
         </header>
 
         <nav class="dash-tabs">
-            <button class="tab active" data-tab="resumen">Resumen</button>
+            <button class="tab" data-tab="resumen">Resumen</button>
             <button class="tab" data-tab="materias">Por materias</button>
             <button class="tab" data-tab="alertas">Alertas</button>
         </nav>
 
         <main class="dash-content">
-            <section id="tab-resumen" class="tab-panel active"></section>
+            <section class="activo" id="sectionContainer">
+                <button id="toggleReportBtn">
+                    Ver porcentajes
+                </button>
+                <section id="tab-resumen" class="tab-panel"></section>
+            </section>
             <section id="tab-materias" class="tab-panel"></section>
-            <section id="tab-alertas" class="tab-panel"></section>
+            <section id="tab-alertas" class="tab-panel" style="font-size: large;">
+                En construccion...
+            </section>
         </main>
 
     </div>

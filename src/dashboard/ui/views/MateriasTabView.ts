@@ -7,8 +7,9 @@ export class MateriaTabView extends View<DashboardViewModel> {
     private tableView = new TableView<ReporteAsistenciaEstudiante>()
     constructor(
         rootId: string,
+        containerId?: string
     ) {
-        super(rootId)
+        super(rootId, containerId)
     }
     render(model: DashboardViewModel): void {
         this.clear()
@@ -18,7 +19,7 @@ export class MateriaTabView extends View<DashboardViewModel> {
             m => {
                 const section = this.createSection(m)
                 const reporte = model.getReportesDeMateria(m)
-
+                
                 if (reporte) {
                     const table = this.tableView.render(reporte)
                     table.className = "reportTable"

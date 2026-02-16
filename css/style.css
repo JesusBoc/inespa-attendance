@@ -274,8 +274,12 @@ footer {
     box-shadow: 0 6px 15px rgba(0,0,0,0.2);
 }
 
-.tabPanel {
-    overflow:scroll;
+.tab-panel {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    overflow: auto;
 }
 
 .reportTable {
@@ -295,6 +299,52 @@ footer {
     border-bottom: 1px solid rgb(0, 0, 0);
 }
 
-.active {
-    display: inline;
+.dash-tabs {
+    display: flex;
+    gap: 0.5rem;
+    background-color: var(--off-white);
+    border-bottom: 2px solid #e5e7eb;
+    margin-bottom: 1rem;
+}
+
+.dash-tabs .tab {
+    background: none;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    font-size: 1.4rem;
+    cursor: pointer;
+    color: #6b7280;
+    position: relative;
+}
+
+.dash-tabs .tab:hover {
+    color: #111827;
+}
+
+.dash-tabs .tab.active {
+    color: #111827;
+    font-weight: 600;
+    background: white;
+}
+
+.dash-tabs .tab.active::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #2563eb; /* azul pro */
+    border-radius: 2px 2px 0 0;
+}
+
+.dash-content section.activo {
+    display: block;
+}
+.dash-content section.inactivo {
+    display: none;
+}
+
+.tab-panel .sectionTitle {
+    margin-top: 0;
 }

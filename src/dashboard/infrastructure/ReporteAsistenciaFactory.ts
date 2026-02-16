@@ -33,40 +33,18 @@ export class ReporteAsistenciaFactory{
         return map
     }
 
-    public build(type: 'porcentaje' | 'totales') {
-        const map = new Map<string, Map<string, ReporteAsistenciaEstudiante>>()
-
-        this.reports.forEach(r => {
-            let materia = map.get(r.materia)
-            if (!materia) {
-                materia = new Map()
-                map.set(r.materia, materia)
-            }
-
-            let rep = materia.get(r.id)
-            if (!rep) {
-                switch (type) {
-                    case 'porcentaje':
-                        rep = new ReporteAsistenciaPorcentaje(
-                            r.id,
-                            r.nombre,
-                            r.apellido
-                        )
-                        break;
-                    default:
-                        rep = new ReporteAsistenciaEstudiante(
-                            r.id,
-                            r.nombre,
-                            r.apellido
-                        )
-                }
-
-                materia.set(r.id, rep)
-            }
-
-            rep.set(r.estado as EstadoAsistencia, r.count)
-        })
-
-        return map
+    static buildAll(
+        reports: ReporteDTO[]
+    ){
+        return {
+            total: ReporteAsistenciaFactory.build(
+                reports,
+                (id,n,a) => new ReporteAsistenciaEstudiante(id,n,a)
+            ),
+            porcentajes: ReporteAsistenciaFactory.build(
+                reports,
+                (id,n,a) => new ReporteAsistenciaPorcentaje(id,n,a)
+            )
+        }
     }
 }

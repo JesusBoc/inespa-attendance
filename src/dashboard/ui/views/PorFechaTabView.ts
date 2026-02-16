@@ -1,10 +1,9 @@
 import { View } from "./View";
 import { DashboardViewModel } from "../viewmodels/DashboardViewModel";
-import { TableView } from "./TableView";
-import type { ReportePorFecha } from "../../domain/reports/ReportePorFecha";
+import { ClassedTableView } from "./ClassedTableView";
 
 export class PorFechaTabView extends View<DashboardViewModel> {
-    private tableView = new TableView<ReportePorFecha>()
+    private tableView = new ClassedTableView()
     constructor(
         rootId: string,
     ) {

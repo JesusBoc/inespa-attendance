@@ -79,6 +79,13 @@ export type Database = {
             foreignKeyName: "alertas_estudiante_id_fkey"
             columns: ["estudiante_id"]
             isOneToOne: false
+            referencedRelation: "asistencias_resumen"
+            referencedColumns: ["estudiante_id"]
+          },
+          {
+            foreignKeyName: "alertas_estudiante_id_fkey"
+            columns: ["estudiante_id"]
+            isOneToOne: false
             referencedRelation: "estudiantes"
             referencedColumns: ["id"]
           },
@@ -120,6 +127,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "asistencias_por_dia"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "asistencias_estudiante_id_fkey"
+            columns: ["estudiante_id"]
+            isOneToOne: false
+            referencedRelation: "asistencias_resumen"
+            referencedColumns: ["estudiante_id"]
           },
           {
             foreignKeyName: "asistencias_estudiante_id_fkey"
@@ -403,6 +417,33 @@ export type Database = {
           id: string | null
           materia: string | null
           nombre: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clases_grupo_id_fkey"
+            columns: ["grupo_id"]
+            isOneToOne: false
+            referencedRelation: "grupos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clases_grupo_id_fkey"
+            columns: ["grupo_id"]
+            isOneToOne: false
+            referencedRelation: "vista_clases_docente"
+            referencedColumns: ["grupo_id"]
+          },
+        ]
+      }
+      asistencias_resumen: {
+        Row: {
+          apellido: string | null
+          estado: string | null
+          estudiante_id: string | null
+          grupo_id: string | null
+          materia: string | null
+          nombre: string | null
+          total: number | null
         }
         Relationships: [
           {
