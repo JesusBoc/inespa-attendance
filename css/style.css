@@ -69,10 +69,21 @@ body {
 }
 
 #clasesMain {
-  background: url("../assets/escudo.png");
-  background-size: clamp(200px, 50vw, 350px);
-  background-repeat: space;
-  background-position: center;
+  background-image: 
+    linear-gradient(0deg,rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.9) 50%, rgba(15, 23, 42, 0.9) 100%), 
+    url("../assets/escudo.png");
+
+  background-size: 
+    cover,
+    clamp(200px, 50vw, 350px);
+
+  background-repeat: 
+    no-repeat,
+    space;
+
+  background-position: 
+    center,
+    center;
 }
 
 #login {
@@ -293,7 +304,7 @@ button {
   box-shadow: inset 0 -2px 0 var(--brand);
 }
 
-.tab-panel {
+.tab-panel section{
   overflow: auto;
 }
 
@@ -301,16 +312,16 @@ button {
 /* =========================
    SECTION TITLES
 ========================= */
-#dashboard .activo {
+#dashboardMain .activo {
   display: block;
 }
 
-#dashboard .inactivo {
+#dashboardMain .inactivo {
   display: none;
 }
 
 .sectionTitle {
-  margin: 1.5rem 0 1rem;
+  margin: 0.5rem 0 1rem;
   font-size: 1.6rem;
   color: var(--text-secondary);
   position: relative;
@@ -382,13 +393,15 @@ button {
 ========================= */
 
 .reportTable {
-  width: 100%;
+  margin: auto;
+  width: 80%;
   border-collapse: collapse;
-  background: var(--bg-surface);
+  background: rgba(30, 41, 59, 0.7);
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
   margin-bottom: 2rem;
+  backdrop-filter: blur(8px);
 }
 
 .reportTable thead {
@@ -553,4 +566,62 @@ button {
     opacity: 1;
     transform: none;
   }
+}
+.alertList {
+  list-style: none;
+}
+
+.alertList li {
+  padding: 1rem 1.2rem;
+  margin-bottom: 0.4rem;
+  border-radius: 6px;
+  font-size: 1.4rem;
+  line-height: 1.3;
+  display: flex;
+  align-items: center;
+  backdrop-filter: blur(8px);
+}
+
+.alertList li.low {
+  background: rgba(59, 130, 246, 0.3);
+  color: #bfdbfe;
+  border-left: 4px solid var(--info);
+}
+
+.alertList li.medium {
+  background: rgba(245, 158, 11, 0.3);
+  color: #fde68a;
+  border-left: 4px solid var(--warning);
+}
+
+.alertList li.high {
+  background: rgba(239, 68, 68, 0.3);
+  color: #fecaca;
+  border-left: 4px solid var(--danger);
+  font-weight: 600;
+}
+
+.noAlerts {
+  opacity: 0.6;
+  font-style: italic;
+  padding: 0.5rem;
+}
+
+#dashboardMain {
+  padding: 0% 10%;
+  background-image: 
+    linear-gradient(0deg,rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.9) 50%, rgba(15, 23, 42, 0.9) 100%), 
+    url("../assets/escudo.png");
+
+  background-size: 
+    cover,
+    clamp(200px, 50vw, 350px);
+
+  background-repeat: 
+    no-repeat,
+    space;
+
+  background-position: 
+    center,
+    center;
 }

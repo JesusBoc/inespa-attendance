@@ -4,12 +4,14 @@ import { MateriaTabView } from "../views/MateriasTabView";
 import { isDashboardTab } from "../state/DashboardState";
 import { PorFechaTabView } from "../views/PorFechaTabView";
 import type { View } from "../views/View";
+import { AlertView } from "../views/AlertView";
 
 export class DashboardController {
     private state = new DashboardState()
     private readonly tabViews: View<any>[] = [
         new MateriaTabView("tab-resumen", "sectionContainer"),
-        new PorFechaTabView("tab-materias")
+        new PorFechaTabView("tab-materias"),
+        new AlertView('tab-alertas')
     ]
 
     constructor(
@@ -51,6 +53,9 @@ export class DashboardController {
                 this.tabViews[0]!.hide()
                 this.tabViews[1]!.render(this.vm)
             break;
+            case "alertas":
+                this.tabViews[0]!.hide()
+                this.tabViews[2]!.render(this.vm)
             default: 
         }
     }
