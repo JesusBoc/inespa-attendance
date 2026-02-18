@@ -1,6 +1,7 @@
 import { AlertEngine } from "../../domain/alerts/AlertEngine"
 import { InasistenciaConsecutivaAlert } from "../../domain/alerts/rules/InasistenciaConsecutivaAlert"
 import { PorcentajeBajoAlert } from "../../domain/alerts/rules/PorcentajeBajo"
+import { PorcentajePorDia } from "../../domain/alerts/rules/PorcentajePorDia"
 import { ReporteAsistenciaEstudiante } from "../../domain/reports/ReporteAsistenciaEstudiante"
 import type { ReporteAsistenciaPorcentaje } from "../../domain/reports/ReporteAsistenciaPorcentaje"
 import type { ReportePorFecha } from "../../domain/reports/ReportePorFecha"
@@ -12,7 +13,8 @@ export class DashboardViewModel {
       new PorcentajeBajoAlert()
     ]),
     temporal: new AlertEngine([
-      new InasistenciaConsecutivaAlert()
+      new InasistenciaConsecutivaAlert(),
+      new PorcentajePorDia()
     ])
   }
 

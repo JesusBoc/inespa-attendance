@@ -1,10 +1,12 @@
 import type { DashboardViewModel } from "../viewmodels/DashboardViewModel";
-import { AlertContext, type AlertResult } from "../../domain/alerts/AlertRule";
+import { type AlertResult } from "../../domain/alerts/AlertRule";
 import { View } from "./View";
+import { InsightContext } from "../../domain/alerts/InsightRule";
 
 const alertTypeNames: Record<string, string> = {
   bajo_porcentaje_de_asistencia: 'Bajo porcentaje de asistencia',
-  inasistencia_consecutiva: 'Muchas inasistencias seguidas'
+  inasistencia_consecutiva: 'Muchas inasistencias seguidas',
+  porcentaje_por_dia: 'Concentracion de inasistencias por dia'
 }
 
 function typeName(type: string): string {
@@ -13,8 +15,8 @@ function typeName(type: string): string {
 
 export class AlertView extends View<DashboardViewModel>{
     render(model: DashboardViewModel): void {
-        const aggregateReportsContext = new AlertContext(model.getAggregateReports())
-        const temporalReportsContext = new AlertContext(model.getTemporalReports())
+        const aggregateReportsContext = new InsightContext(model.getAggregateReports())
+        const temporalReportsContext = new InsightContext(model.getTemporalReports())
 
         const alertEngines = model.getAlertEngines()
 

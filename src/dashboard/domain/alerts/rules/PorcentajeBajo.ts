@@ -1,15 +1,34 @@
 import type { ReporteAsistenciaEstudiante } from "../../reports/ReporteAsistenciaEstudiante";
 import { EstadoAsistencia } from "../../value-objects/EstadoAsistencia";
-import { AlertContext, AlertRule, type AlertResult } from "../AlertRule";
+import { AlertRule } from "../AlertRule";
+import type { InsightResult } from "../InsightRule";
 
-export class PorcentajeBajoAlert extends AlertRule<ReporteAsistenciaEstudiante> {
+type Meta = {
+    nombre: string,
+    apellido: string,
+    materia: string,
+    percentage: number
+}
+
+export class PorcentajeBajoAlert extends AlertRule<ReporteAsistenciaEstudiante, Meta> {
     type = 'bajo_porcentaje_de_asistencia';
 
     readonly lowThreshold = 0.1
     readonly medThreshold = 0.2
     readonly highThreshold = 0.3
 
-    protected evaluateSubject([m, reports]: [string, ReporteAsistenciaEstudiante[]]): AlertResult[] {
+    protected shouldAlert(metadata: Meta): boolean {
+        return metadata.percentage >= this.lowThreshold
+    }
+    protected getSeverity(metadata: Meta): "low" | "medium" | "high" {
+        if (metadata.percentage >= this.highThreshold) return 'high'
+        if (metadata.percentage >= this.medThreshold) return 'medium'
+        return 'low'
+    }
+    protected buildMessage(metadata: Meta): string {
+        return `${metadata.nombre} ${metadata.apellido} ha faltado al ${(metadata.percentage * 100).toFixed(1)}% de las clases de ${metadata.materia}`
+    }
+    protected evaluateSubject([m, reports]: [string, ReporteAsistenciaEstudiante[]]): InsightResult<Meta>[] {
         return reports.flatMap(
             r => {
                 const sum = Array.from(r.getRecords().values()).reduce(
@@ -18,30 +37,18 @@ export class PorcentajeBajoAlert extends AlertRule<ReporteAsistenciaEstudiante> 
                 )
                 if (sum === 0) return []
                 const percentage = (r.get(EstadoAsistencia.Ausente) ?? 0) / sum
-                return this.evaluateMetric(percentage, r.getLabels(), m)
+                return [
+                    {
+                        type: this.type,
+                        metadata: {
+                            nombre: r.nombre,
+                            apellido: r.apellido,
+                            percentage: percentage,
+                            materia: m
+                        }
+                    }
+                ]
             }
         )
-    }
-
-    protected shouldAlert(percentage: number): boolean {
-        return percentage >= this.lowThreshold
-    }
-
-    protected getSeverity(percentage: number): 'low' | 'medium' | 'high' {
-        if (percentage >= this.highThreshold) return 'high'
-        if (percentage >= this.medThreshold) return 'medium'
-        return 'low'
-    }
-
-    protected buildAlert(
-        percentage: number,
-        labels: string[],
-        materia: string
-    ): AlertResult {
-        return {
-            type: this.type,
-            severity: this.getSeverity(percentage),
-            message: `${labels.join(' ')} ha faltado al ${(percentage * 100).toFixed(1)}% de las clases de ${materia}`
-        }
     }
 }
