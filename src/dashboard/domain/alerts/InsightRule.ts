@@ -1,4 +1,5 @@
 import type { AbstractReport } from "../reports/AbstractReport"
+import type { CategoricalInsight } from "./interfaces"
 
 export type InsightResult<T> = {
     type: string,
@@ -37,4 +38,7 @@ export abstract class InsightRule<R extends AbstractReport<any, any, any>, MetaT
     }
 
     protected abstract evaluateSubject([m, reports]: [string, R[]]): InsightResult<MetaType>[]
+    supportsCategorical(): this is CategoricalInsight<MetaType> {
+        return typeof (this as any).toCategoricalSeries === 'function'
+    }
 }

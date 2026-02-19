@@ -1,7 +1,8 @@
 export const DASHBOARD_TABS = [
   "resumen",
   "materias",
-  "alertas"
+  "alertas",
+  "insights"
 ] as const
 
 export type DashboardTab = typeof DASHBOARD_TABS[number]

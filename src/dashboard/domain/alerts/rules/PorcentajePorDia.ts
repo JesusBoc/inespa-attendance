@@ -1,8 +1,10 @@
 import { LocalDate } from "../../../infrastructure/mappers/LocalDate"
 import type { ReportePorFecha } from "../../reports/ReportePorFecha"
+import type { CategoricalSeries } from "../../series/CategoricalSeries"
 import { EstadoAsistencia } from "../../value-objects/EstadoAsistencia"
 import { AlertRule, type AlertResult } from "../AlertRule"
 import type { InsightResult } from "../InsightRule"
+import type { CategoricalInsight } from "../interfaces"
 
 type PorcentajePorDiaMetadata = {
     byDay: Map<string, number>
@@ -13,7 +15,10 @@ type PorcentajePorDiaMetadata = {
 
 const weekDays = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
 
-export class PorcentajePorDia extends AlertRule<ReportePorFecha, PorcentajePorDiaMetadata> {
+export class PorcentajePorDia
+extends AlertRule<ReportePorFecha, PorcentajePorDiaMetadata>
+implements CategoricalInsight<PorcentajePorDiaMetadata>
+{
     type: string = 'porcentaje_por_dia'
     private lowThreshold = 0.1
     private medThreshold = 0.2
@@ -101,5 +106,15 @@ export class PorcentajePorDia extends AlertRule<ReportePorFecha, PorcentajePorDi
 
         const sd = Math.sqrt(variance)
         return sd/mean
+    }
+    toCategoricalSeries(metadata: PorcentajePorDiaMetadata): CategoricalSeries {
+        const labels = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes']
+        const values = labels.map(
+            day => metadata.byDay.get(day) ?? 0
+        )
+        return {
+            labels,
+            values
+        }
     }
 }

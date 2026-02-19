@@ -1,4 +1,5 @@
 import { AlertEngine } from "../../domain/alerts/AlertEngine"
+import { InsightEngine } from "../../domain/alerts/InsightEngine"
 import { InasistenciaConsecutivaAlert } from "../../domain/alerts/rules/InasistenciaConsecutivaAlert"
 import { PorcentajeBajoAlert } from "../../domain/alerts/rules/PorcentajeBajo"
 import { PorcentajePorDia } from "../../domain/alerts/rules/PorcentajePorDia"
@@ -15,6 +16,11 @@ export class DashboardViewModel {
     temporal: new AlertEngine([
       new InasistenciaConsecutivaAlert(),
       new PorcentajePorDia()
+    ])
+  }
+  private insightEngines = {
+    temporal: new InsightEngine([
+      new PorcentajePorDia(),
     ])
   }
 
@@ -58,5 +64,9 @@ export class DashboardViewModel {
   
   getAlertEngines(){
     return this.alertEngines
+  }
+
+  getInsightEngines(){
+    return this.insightEngines
   }
 }

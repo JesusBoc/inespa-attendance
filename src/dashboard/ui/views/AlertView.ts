@@ -9,7 +9,7 @@ const alertTypeNames: Record<string, string> = {
   porcentaje_por_dia: 'Concentracion de inasistencias por dia'
 }
 
-function typeName(type: string): string {
+export function typeName(type: string): string {
   return alertTypeNames[type] ?? type
 }
 
