@@ -4,14 +4,15 @@ import type { InsightContext } from "./InsightRule";
 
 export class AlertEngine<R extends AbstractReport<any,any,any>> {
     constructor(
-        private rules: AlertRule<R>[]
+        private readonly rules: AlertRule<R>[],
+        private readonly context: InsightContext<R>
     ){}
 
-    evaluate(ctx: InsightContext<R>){
+    evaluate(){
         const alertMap = new Map<string, AlertResult[]>()
         this.rules.forEach(
             r => {
-                alertMap.set(r.type,r.evaluateAlerts(ctx))
+                alertMap.set(r.type,r.evaluateAlerts(this.context))
             }
         )
         return alertMap

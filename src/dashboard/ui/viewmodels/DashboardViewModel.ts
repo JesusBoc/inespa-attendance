@@ -1,3 +1,5 @@
+import type { DashboardConfig } from "../../application/DashboardConfig"
+import type { DashboardScope } from "../../application/DashboardScope"
 import { AlertEngine } from "../../domain/alerts/AlertEngine"
 import { InsightEngine } from "../../domain/alerts/InsightEngine"
 import { InasistenciaConsecutivaAlert } from "../../domain/alerts/rules/InasistenciaConsecutivaAlert"
@@ -9,7 +11,7 @@ import type { ReportePorFecha } from "../../domain/reports/ReportePorFecha"
 
 export class DashboardViewModel {
   private reportMode: 'total' | 'porcentajes' = 'total'
-  private alertEngines = {
+  /* private alertEngines = {
     aggregate: new AlertEngine([
       new PorcentajeBajoAlert()
     ]),
@@ -22,9 +24,11 @@ export class DashboardViewModel {
     temporal: new InsightEngine([
       new PorcentajePorDia(),
     ])
-  }
+  } */
 
   constructor(
+    private scope: DashboardScope,
+    private config: DashboardConfig,
     private reportesPorMateria: {
       total: Map<string, Map<string, ReporteAsistenciaEstudiante>>
       porcentajes: Map<string, Map<string, ReporteAsistenciaPorcentaje>>
@@ -63,10 +67,10 @@ export class DashboardViewModel {
   }
   
   getAlertEngines(){
-    return this.alertEngines
+    return this.config.alertEngines
   }
 
   getInsightEngines(){
-    return this.insightEngines
+    return this.config.insightEngines
   }
 }
