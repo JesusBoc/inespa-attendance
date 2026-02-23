@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asistencia | Selección de clase</title>
+    <title>Admin Panel</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="shortcut icon" href="./assets/escudo.ico" type="image/x-icon">
 </head>
 <body>
     <header>
-        <h1>Acciones disponibles</h1>
-        <h2 id="saludo"></h2>
+        <h1>Panel de administración</h1>
     </header>
-    <main id="clasesMain"></main>
+    <main id="adminMain">
+        <section id="assignmentsMenu">
+            <div id="assignmentsActions"></div>
+        </section>
+    </main>
 
-    <script type="module" src="./src/clases.ts"></script>
+    <script type="module" src="./src/adminPanel/adminPanel.ts"></script>
 </body>
 </html>

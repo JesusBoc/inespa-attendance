@@ -1,5 +1,8 @@
 import { EstadoAsistencia } from "../model/asistencia"
 import { supabase } from "../supabase"
+import { runRouteGuard, type UserRole } from "../util/RoleUtils"
+import { CoordinatorDashboardStrategy } from "./application/CoordinatorDashboardStrategy"
+import { TeacherDashboardStrategy } from "./application/TeacherDashboardStrategy"
 import type { AsistenciaDTO } from "./infrastructure/dto/AsistenciaDTO"
 import type { ReporteDTO } from "./infrastructure/dto/ReporteDTO"
 import { ReporteAsistenciaFactory } from "./infrastructure/ReporteAsistenciaFactory"
@@ -13,11 +16,22 @@ const grupo_id = params.get('grupo_id')
 
 async function main() {
 
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-        location.replace('index.html')
-        return
-    }
+    const session = await runRouteGuard()
+    if(!session) return
+
+    const { perfil } = session
+    const dashboardStrategy = (
+        () => {
+            switch (perfil.rol as UserRole) {
+                case "docente":
+                    return new TeacherDashboardStrategy()
+                case "coordinador":
+                    return new CoordinatorDashboardStrategy()
+                default:
+                    throw new Error("User has no defined strategy");
+            }
+        }
+    )()
 
     if (!grupo_id) {
         alert("Debe especificar una id de grupo")
@@ -93,7 +107,17 @@ async function main() {
     const reportePorFecha = ReportePorFechaMapper.build(
         reportes
     )
-    const vm = new DashboardViewModel(reporteResumen, reportePorFecha)
+    const vm = new DashboardViewModel(
+        {
+            type: 'COURSE',
+            courseId: grupo_id
+        },
+        {
+            strategy: dashboardStrategy
+        },
+        reporteResumen,
+        reportePorFecha
+    )
     const controller = new DashboardController(vm)
     controller.init()
     document.body.style.opacity = "1"

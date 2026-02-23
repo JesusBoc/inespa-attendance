@@ -15,17 +15,9 @@ export function typeName(type: string): string {
 
 export class AlertView extends View<DashboardViewModel>{
     render(model: DashboardViewModel): void {
-        const aggregateReportsContext = new InsightContext(model.getAggregateReports())
-        const temporalReportsContext = new InsightContext(model.getTemporalReports())
-
-        const alertEngines = model.getAlertEngines()
-
-        const alerts = [
-            ...alertEngines.aggregate.evaluate(aggregateReportsContext).entries(),
-            ...alertEngines.temporal.evaluate(temporalReportsContext).entries()
-        ]
+        const alerts = model.getInsightsResult().alerts
         
-        alerts.forEach(
+        alerts.entries().forEach(
             ([type, alerts]) => {
                 const section = this.createSection(typeName(type))
                 section.appendChild(this.createAlertList(alerts))

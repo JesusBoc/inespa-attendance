@@ -37,30 +37,3 @@ export class BarPlot {
         )
     }
 }
-
-function main() {
-    const map: Map<string, number> = new Map()
-
-    map.set('Enero', 30)
-    map.set('Febrero', 50)
-    map.set('Marzo', 20)
-
-    const data = {
-        labels: ['Enero', 'Febrero', 'Marzo'],
-        datasets: [
-            {
-                label: 'Ventas',
-                data: [30, 50, 20],
-                backgroundColor: 'rgba(75, 192, 192, 0.6)',
-            },
-        ],
-    };
-
-    const canva = document.createElement('canvas')
-    canva.height = 5
-    canva.width = 10
-    document.body.appendChild(canva)
-
-}
-
-main()

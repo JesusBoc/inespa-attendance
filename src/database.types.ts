@@ -462,6 +462,55 @@ export type Database = {
           },
         ]
       }
+      assignment_view: {
+        Row: {
+          apellido_docente: string | null
+          docente_id: string | null
+          grupo: string | null
+          grupo_id: string | null
+          id: string | null
+          materia: string | null
+          materia_id: string | null
+          nombre_docente: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "docente_materia_grupo_docente_id_fkey"
+            columns: ["docente_id"]
+            isOneToOne: false
+            referencedRelation: "perfiles_usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "docente_materia_grupo_grupo_id_fkey"
+            columns: ["grupo_id"]
+            isOneToOne: false
+            referencedRelation: "grupos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "docente_materia_grupo_grupo_id_fkey"
+            columns: ["grupo_id"]
+            isOneToOne: false
+            referencedRelation: "vista_clases_docente"
+            referencedColumns: ["grupo_id"]
+          },
+          {
+            foreignKeyName: "docente_materia_grupo_materia_id_fkey"
+            columns: ["materia_id"]
+            isOneToOne: false
+            referencedRelation: "materias"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "docente_materia_grupo_materia_id_fkey"
+            columns: ["materia_id"]
+            isOneToOne: false
+            referencedRelation: "vista_clases_docente"
+            referencedColumns: ["materia_id"]
+          },
+        ]
+      }
       vista_clases_docente: {
         Row: {
           dmg_id: string | null

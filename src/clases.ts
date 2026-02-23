@@ -1,97 +1,140 @@
 import { supabase } from './supabase.js'
+import { runRouteGuard, type UserRole } from './util/RoleUtils.js'
+
+const session = await runRouteGuard()
+const user = session?.user
+const perfil = session?.perfil
+
 
 async function main() {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-        location.replace('index.html')
-        return
+    if (!user || !perfil) return
+    const rol = perfil.rol as UserRole
+    if(rol == 'docente'){
+        await renderSection(
+            'clasesMain',
+            'clases',
+            'Mis clases',
+            renderClasses
+        )
     }
-    const { data: perfil } = await supabase
-        .from('perfiles_usuarios')
-        .select('*')
-        .single()
-    
-    if(!perfil) return
+    if(rol == 'docente' || rol == 'coordinador'){
+        await renderSection(
+            'clasesMain',
+            'reportes',
+            'Reportes',
+            renderDashboards
+        )
+    }
+    document.body.style.opacity = '1'
+}
 
-    document.getElementById('saludo')!.textContent =
-        `Hola, ${perfil.nombre} ${perfil.apellido}`
+async function renderSection(rootid: string, id: string, title: string, callback: (a: HTMLElement) => Promise<void> | void) {
+    const root = document.getElementById(rootid)
+    if (!root) throw new Error(`Element ${rootid} not found`);
 
-    const { data: clases } = await supabase
+    const section = document.createElement('section')
+    section.id = id
+
+    const sectionTitle = document.createElement('h3')
+    sectionTitle.textContent = title
+    sectionTitle.className = 'sectionTitle'
+    section.appendChild(sectionTitle)
+
+    await callback(section)
+    root.appendChild(section)
+}
+
+function createCard(
+    title: string,
+    buttonText: string,
+    btnCallback: () => any
+) {
+    const div = document.createElement('div')
+    div.className = 'card'
+
+    const titulo = document.createElement('strong')
+    titulo.innerText = `${title}`
+    titulo.className = 'classInfo'
+
+    const lineBreak = document.createElement('br')
+    const btn = document.createElement('button')
+
+    btn.innerText = buttonText
+    btn.onclick = btnCallback
+    btn.className = "goAttendance"
+
+    div.appendChild(titulo)
+    div.appendChild(lineBreak)
+    div.appendChild(btn)
+
+    return div
+}
+
+async function renderClasses(section: HTMLElement) {
+    if (!user) return
+    const classContainer = document.createElement('div')
+    classContainer.className = 'cardContainer'
+    const { data: clases, error } = await supabase
         .from('vista_clases_docente')
         .select('*')
         .eq('docente_id', user.id)
+    if (error) {
+        alert(error.message)
+        return
+    }
+    if (!clases || clases.length === 0) {
+        classContainer.textContent = 'No tienes clases asignadas'
+        return
+    }
+    clases.forEach(
+        c => {
+            const card = createCard(
+                `${c.grupo} - ${c.materia}`,
+                'Tomar asistencia',
+                () => irAsistencia(c.dmg_id ?? '')
+            )
+            classContainer.appendChild(card)
+        }
+    )
+    section.appendChild(classContainer)
+}
 
+async function renderDashboards(section: HTMLElement) {
+    if (!user) return
+    const classContainer = document.createElement('div')
+    classContainer.className = 'cardContainer'
     const { data: grupos, error } = await supabase
         .from('grupos')
         .select('*')
         .order('nivel')
         .order('nombre')
-
-    if(error) alert(error.message)
-    
-
-    const contClases = document.getElementById('clases')!
-    if (!clases || clases.length === 0) {
-        contClases.textContent = 'No tienes clases asignadas'
-    } else {
-        clases.forEach(c => {
-            const div = document.createElement('div')
-            div.className = 'card'
-
-            const titulo = document.createElement('strong')
-            titulo.innerText = `${c.grupo} - ${c.materia}`
-            titulo.className = 'classInfo'
-
-            const lineBreak = document.createElement('br')
-
-            const btn = document.createElement('button')
-            btn.innerText = 'Tomar asistencia'
-            btn.onclick = () => irAsistencia(c.dmg_id)
-            btn.className = "goAttendance"
-
-            div.appendChild(titulo)
-            div.appendChild(lineBreak)
-            div.appendChild(btn)
-
-            contClases.appendChild(div)
-        })
+    if (error) {
+        alert(error.message)
+        return
     }
-
-    const contDir = document.getElementById('direccion')!
-
     if (!grupos || grupos.length === 0) {
-        contDir.textContent = 'No eres director de grupo'
-    } else {
-        grupos.forEach(g => {
-            const div = document.createElement('div')
-            div.className = 'card'
-
-            const titulo = document.createElement('strong')
-            titulo.innerText = `${g.nombre}`
-            titulo.className = 'classInfo'
-
-            const lineBreak = document.createElement('br')
-
-            const btn = document.createElement('button')
-            btn.innerText = 'Ver reporte general'
-            btn.onclick = () => irReporte(g.id)
-            btn.className = "goAttendance"
-
-            div.appendChild(titulo)
-            div.appendChild(lineBreak)
-            div.appendChild(btn)
-            contDir.appendChild(div)
-        })
+        classContainer.textContent = 'No puedes ver reportes'
+        return
     }
-    document.body.style.opacity = '1'
-
-    function irAsistencia(dmg_id: string | null) {
-        location.replace(`asistencia.html?dmg_id=${dmg_id}`)
-    }
-
-    function irReporte(dmg_id: string) {
-        window.location.href = (`dashboard.html?grupo_id=${dmg_id}`)
-    }
+    grupos.forEach(
+        g => {
+            const card = createCard(
+                g.nombre,
+                'Ver reporte',
+                () => irReporte(g.id)
+            )
+            classContainer.appendChild(card)
+        }
+    )
+    section.appendChild(classContainer)
 }
 
+function irAsistencia(dmg_id: string) {
+    if(dmg_id == '') return
+    location.replace(`asistencia.html?dmg_id=${dmg_id}`)
+}
+
+function irReporte(dmg_id: string) {
+    window.location.href = (`dashboard.html?grupo_id=${dmg_id}`)
+}
 main()

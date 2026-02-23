@@ -8,11 +8,14 @@ import { View } from "./View";
 export class InsightsView extends View<DashboardViewModel> {
 
     render(model: DashboardViewModel): void {
-        const insightContext = new InsightContext(model.getTemporalReports())
-        const insightEngines = model.getInsightEngines()
+        const insightRules = new Map(model.getInsightRules().map(
+            r => [r.type, r]
+        ))
+        const InsightResults = model.getInsightsResult().insights
 
-        for (const rule of insightEngines.temporal.getRules()) {
-            const results = rule.evaluate(insightContext)
+        for (const [type, results] of InsightResults.entries()) {
+            const rule = insightRules.get(type.replace('+',''))
+            if(!rule) throw new Error("The amount of rules is different of the amount of results");
             if(results.length === 0) continue
             if (!rule.supportsCategorical()) continue
             const series: CategoricalSeries[] = []

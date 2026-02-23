@@ -2,6 +2,7 @@ import { LocalDate } from "../../../infrastructure/mappers/LocalDate"
 import type { ReportePorFecha } from "../../reports/ReportePorFecha"
 import type { CategoricalSeries } from "../../series/CategoricalSeries"
 import { EstadoAsistencia } from "../../value-objects/EstadoAsistencia"
+import type { AggregableInsightRule } from "../AggregableInsightRule"
 import { AlertRule, type AlertResult } from "../AlertRule"
 import type { InsightResult } from "../InsightRule"
 import type { CategoricalInsight } from "../interfaces"
@@ -16,9 +17,9 @@ type PorcentajePorDiaMetadata = {
 const weekDays = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
 
 export class PorcentajePorDia
-extends AlertRule<ReportePorFecha, PorcentajePorDiaMetadata>
-implements CategoricalInsight<PorcentajePorDiaMetadata>
-{
+    extends AlertRule<ReportePorFecha, PorcentajePorDiaMetadata>
+    implements CategoricalInsight<PorcentajePorDiaMetadata>,
+    AggregableInsightRule<ReportePorFecha, PorcentajePorDiaMetadata> {
     type: string = 'porcentaje_por_dia'
     private lowThreshold = 0.1
     private medThreshold = 0.2
@@ -29,8 +30,8 @@ implements CategoricalInsight<PorcentajePorDiaMetadata>
     }
 
     protected getSeverity(metadata: PorcentajePorDiaMetadata): "low" | "medium" | "high" {
-        if(metadata.cv >= this.highThreshold) return 'high'
-        if(metadata.cv >= this.medThreshold) return 'medium'
+        if (metadata.cv >= this.highThreshold) return 'high'
+        if (metadata.cv >= this.medThreshold) return 'medium'
         return 'low'
     }
 
@@ -39,7 +40,7 @@ implements CategoricalInsight<PorcentajePorDiaMetadata>
     }
 
     protected evaluateSubject([m, reports]: [string, ReportePorFecha[]]): InsightResult<PorcentajePorDiaMetadata>[] {
-        const byDay = new Map<string,number>()
+        const byDay = new Map<string, number>()
 
         const first = reports[0]
         if (!first) return []
@@ -65,7 +66,7 @@ implements CategoricalInsight<PorcentajePorDiaMetadata>
             }
         )
         const max = this.maxByDay(byDay)
-        if(!max) return []
+        if (!max) return []
 
         const maxDay = max[0]
         const cv = this.calculateCV(byDay)
@@ -90,31 +91,84 @@ implements CategoricalInsight<PorcentajePorDiaMetadata>
             (max, current) => current[1] > max[1] ? current : max
         )
     }
-    
-    private calculateCV(map: Map<string, number>){
+
+    private calculateCV(map: Map<string, number>) {
         const mean = map.values().reduce(
             (acc, s) => acc + s,
             0
         ) / map.size
 
-        if(mean == 0) return 0
+        if (mean == 0) return 0
 
         const variance = map.values().reduce(
-            (acc,v)=> acc + Math.pow(v - mean, 2),
+            (acc, v) => acc + Math.pow(v - mean, 2),
             0
         ) / map.size
 
         const sd = Math.sqrt(variance)
-        return sd/mean
+        return sd / mean
     }
     toCategoricalSeries(metadata: PorcentajePorDiaMetadata): CategoricalSeries {
         const labels = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes']
-        const values = labels.map(
+
+        const currentValues = labels.map(
             day => metadata.byDay.get(day) ?? 0
+        )
+        const sum = currentValues.reduce(
+            (acc, cur) => acc + cur
+            , 0
+        )
+        const values = currentValues.map(
+            val => {
+                if (sum === 0) return 0
+                return ((val * 100 / sum))
+            }
         )
         return {
             labels,
             values
+        }
+    }
+
+    aggregate(result: InsightResult<PorcentajePorDiaMetadata>[]): InsightResult<PorcentajePorDiaMetadata> {
+        const byDay = new Map<string, number>()
+        weekDays.forEach(
+            (day) => {
+                byDay.set(day, 0)
+            }
+        )
+        result.forEach(
+            r => {
+                r.metadata.byDay.entries().forEach(
+                    ([day, count]) => {
+                        const current = byDay.get(day) ?? 0
+                        byDay.set(day, current + count)
+                    }
+                )
+            }
+        )
+        const max = this.maxByDay(byDay)
+        if (!max) return {
+            type: this.type,
+            metadata: {
+                byDay,
+                maxDay: 'none',
+                materia: 'Consolidado',
+                cv: 0
+            }
+        }
+
+        const maxDay = max[0]
+        const cv = this.calculateCV(byDay)
+
+        return {
+            type: this.type,
+            metadata: {
+                byDay,
+                maxDay,
+                materia: 'Consolidado',
+                cv
+            }
         }
     }
 }

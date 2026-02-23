@@ -1,6 +1,7 @@
 import { supabase } from './supabase.js'
 import { EstadoAsistencia, AsistenciaStateMachine } from './model/asistencia.js'
 import type { Asistencia, AsistenciaDTO } from './model/asistencia.js'
+import { runRouteGuard } from './util/RoleUtils.js'
 
 // --------------------
 // Configuración
@@ -42,6 +43,8 @@ document.getElementById('cancelButton')!
   )
 
 async function init() {
+  const session = await runRouteGuard()
+  if(!session) return
   if (!dmg_id) {
     alert('Falta el ID de asignación docente ')
     location.replace('clases.html')
