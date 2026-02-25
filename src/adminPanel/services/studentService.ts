@@ -16,11 +16,27 @@ export class StudentService extends BaseService<string, Student> {
         return service
     }
 
+    override async delete(id: string): Promise<void> {
+        const { data: student, error } = await supabase
+            .from(this.tableName)
+            .update(
+                {
+                    activo: false
+                }
+            )
+            .eq('id', id)
+            .select()
+            .single()
+        if (error) throw new Error(error.message);
+        if (student) this.data.delete(student.id)
+    }
+
     protected async fetchAll(): Promise<Map<string, Student>> {
         const map = new Map<string, Student>()
         const { data: students, error } = await supabase
             .from(this.tableName)
             .select('*')
+            .eq('activo', true)
             .order('apellido')
             .order('nombre')
 
@@ -54,14 +70,14 @@ export class StudentService extends BaseService<string, Student> {
             )
             .select('id')
             .single()
-        if(error) throw new Error(error.message);
-        if(!student) throw new Error("Couldnt retrieve id");
-        
+        if (error) throw new Error(error.message);
+        if (!student) throw new Error("Couldnt retrieve id");
+
         this.data.set(student.id, data)
         return student.id
     }
 
-    async updateName(id: string, newName: string): Promise<boolean>{
+    async updateName(id: string, newName: string): Promise<boolean> {
         const { data: student, error } = await supabase
             .from(this.tableName)
             .update(
@@ -69,14 +85,14 @@ export class StudentService extends BaseService<string, Student> {
                     nombre: newName
                 }
             )
-            .eq('id',id)
+            .eq('id', id)
             .select()
             .single()
-        if(error) throw new Error(error.message);
-        if(student) this.data.set(student.id, this.rowMapper(student))
+        if (error) throw new Error(error.message);
+        if (student) this.data.set(student.id, this.rowMapper(student))
         return student != null
     }
-    async updateLastName(id: string, newName: string): Promise<boolean>{
+    async updateLastName(id: string, newName: string): Promise<boolean> {
         const { data: student, error } = await supabase
             .from(this.tableName)
             .update(
@@ -84,19 +100,34 @@ export class StudentService extends BaseService<string, Student> {
                     apellido: newName
                 }
             )
-            .eq('id',id)
+            .eq('id', id)
             .select()
             .single()
-        if(error) throw new Error(error.message);
-        if(student) this.data.set(student.id, this.rowMapper(student))
+        if (error) throw new Error(error.message);
+        if (student) this.data.set(student.id, this.rowMapper(student))
         return student != null
     }
-    private rowMapper(data: Database['public']['Tables']['estudiantes']['Row']){
+    async updateGroup(id: string, newGroupId: string): Promise<boolean> {
+        const { data: student, error } = await supabase
+            .from(this.tableName)
+            .update(
+                {
+                    grupo_id: newGroupId
+                }
+            )
+            .eq('id', id)
+            .select()
+            .single()
+        if (error) throw new Error(error.message);
+        if (student) this.data.set(student.id, this.rowMapper(student))
+        return student != null
+    }
+    private rowMapper(data: Database['public']['Tables']['estudiantes']['Row']) {
         return {
-                name: data.nombre,
-                lastName: data.apellido,
-                active: data.activo ?? false,
-                groupId: data.grupo_id
-            } as Student
+            name: data.nombre,
+            lastName: data.apellido,
+            active: data.activo ?? false,
+            groupId: data.grupo_id
+        } as Student
     }
 }

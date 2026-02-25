@@ -12,6 +12,7 @@ export default defineConfig({
             vista1: resolve(__dirname, 'clases.html'),
             vista2: resolve(__dirname, 'asistencia.html'),
             dashboard: resolve(__dirname, 'dashboard.html'),
+            adminPanel: resolve(__dirname, 'adminPanel.html')
         }
     }
   },

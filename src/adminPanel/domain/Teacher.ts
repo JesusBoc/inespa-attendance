@@ -1,8 +1,7 @@
 import type { UserRole } from "../../util/RoleUtils"
 
-export type User = {
+export type Teacher = {
+    idFK: string
     name: string
     lastName: string
-    role: UserRole
-    active: boolean
 }

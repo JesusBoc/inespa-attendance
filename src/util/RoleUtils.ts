@@ -4,9 +4,12 @@ export type UserRole = 'docente' | 'coordinador' | 'admin'
 
 export async function runRouteGuard() {
     const { data: { user } } = await supabase.auth.getUser()
-
+    const currentPage = window.location.pathname.split('/').pop()
+    
     if (!user) {
-        location.replace('index.html')
+        if(currentPage !== '' && currentPage !== 'index.html'){
+            location.replace('index.html')
+        }
         return null
     }
 
@@ -22,10 +25,13 @@ export async function runRouteGuard() {
     }
 
     const role = perfil.rol as UserRole
-    const currentPage = window.location.pathname.split('/').pop()
 
     // --- Reglas de navegación ---
     switch (currentPage) {
+        case '':
+        case 'index.html':
+            redirectToDefault(role)
+            return null
 
         case 'clases.html':
             if (role === 'admin') {
@@ -69,6 +75,6 @@ function defaultPageFor(role: UserRole) {
     }
 }
 
-function redirectToDefault(role: UserRole) {
+export function redirectToDefault(role: UserRole) {
     location.replace(defaultPageFor(role))
 }
