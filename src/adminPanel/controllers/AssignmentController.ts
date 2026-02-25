@@ -25,15 +25,19 @@ export class AssignmentController {
             element.addEventListener(
                 'click',
                 () => {
+                    const currentId = this.viewModel.getSelectedCourse()
+                    const activeBtn = document.querySelector(`[data-id='${currentId}']`)
+                    if(activeBtn) activeBtn.classList.remove('selected')
                     const id = element.getAttribute('data-id')
                     if (!id) throw new Error(`id: ${id} not found`);
                     this.view.clear()
-                    if (this.viewModel.getSelectedCourse() == id) {
+                    if (currentId == id) {
                         this.view.hideButton()
                         this.viewModel.setSelectedCourse(undefined)
                         return
                     }
                     this.viewModel.setSelectedCourse(id)
+                    element.classList.add('selected')
                     this.view.render(this.viewModel)
                     this.view.showButton()
                 }

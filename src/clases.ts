@@ -1,13 +1,22 @@
 import { supabase } from './supabase.js'
+import { LogoutButton } from './util/LogoutButton.js'
 import { runRouteGuard, type UserRole } from './util/RoleUtils.js'
 
 const session = await runRouteGuard()
 const user = session?.user
 const perfil = session?.perfil
 
+const header = document.getElementsByTagName('header').item(0)
+
+if(!header) throw new Error("No header in this document");
+const logout = new LogoutButton()
+
+header.appendChild(logout.render())
 
 async function main() {
     if (!user || !perfil) return
+    const greetingHeader = document.getElementById('saludo')!
+    greetingHeader.innerText = `Bienvenido/a, ${perfil.nombre} ${perfil.apellido}`
     const rol = perfil.rol as UserRole
     if(rol == 'docente'){
         await renderSection(

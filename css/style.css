@@ -69,7 +69,8 @@ body {
   align-items: center;
 }
 
-#clasesMain, #adminMain {
+#clasesMain,
+#adminMain {
   background-image:
     linear-gradient(0deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.9) 50%, rgba(15, 23, 42, 0.9) 100%),
     url("../assets/escudo.png");
@@ -696,7 +697,7 @@ button {
   background: var(--bg-elevated);
 }
 
-.mainSelector{
+.mainSelector {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
@@ -710,7 +711,8 @@ button {
   border-radius: 10px;
   backdrop-filter: blur(3px);
 }
-.mainSelector li{
+
+.mainSelector li {
   font-size: 2.0rem;
   display: inline;
   background-color: var(--bg-surface);
@@ -720,15 +722,16 @@ button {
   transition: all 0.2s;
 }
 
-.mainSelector li:hover{
+.mainSelector li:hover {
   transform: translateY(-1px);
   box-shadow: var(--shadow);
   background-color: var(--bg-elevated);
 }
+
 .actionGroup {
- display: flex;
- gap: 5px;
- justify-content: space-evenly;
+  display: flex;
+  gap: 5px;
+  justify-content: space-evenly;
 }
 
 .actionGroup button {
@@ -738,8 +741,31 @@ button {
   border-radius: 5px;
   transition: all 0.1s;
 }
+
 .actionGroup button:hover {
   background-color: var(--bg-surface);
   translate: 0 -1px;
   box-shadow: var(--shadow);
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+.logout-button svg {
+  width: 30px;
+  height: 30px;
+  fill: var(--brand);
+}
+
+ul .selected{
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+  background-color: var(--bg-elevated);
 }
